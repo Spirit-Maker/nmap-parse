@@ -245,6 +245,14 @@ def printAliveIps(nmapOutput):
     for ip in sortIpList(tmpParsedHosts):
         print("%s" % (ip))
 
+def printAliveIpsWithPorts(nmapOutput):
+    header('Alive IPs and Ports List')
+    # Get all IP and respective ports against IPs
+    defaultFilters = nmap.NmapFilters()
+    defaultFilters.onlyAlive = True
+    defaultFilters.mustHavePorts = True
+    printHosts(nmapOutput, filters=defaultFilters)
+
 def getFilesInDir(directory, filter='', recurse=False):
     allFiles = []
     regex = re.compile(filter)
