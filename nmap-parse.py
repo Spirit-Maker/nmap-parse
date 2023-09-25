@@ -26,6 +26,7 @@ def main():
     parser.add_option("-e","--exec", dest="cmd", help="Script or tool to run on each IP remaining after port filter is applied. IP will be appended to end of script command line", metavar="CMD")
     parser.add_option("-l","--iplist", dest="ipList", action="store_true", help="Print plain list of matching IPs")
     parser.add_option("-a","--alive-hosts", dest="aliveHosts", action="store_true", help="Print plain list of all alive IPs")
+    parser.add_option("-o","--alive-hosts-ports", dest="aliveHostsWithPorts", action="store_true", help="Print plain list of all alive IPs and ports")
     parser.add_option("-s","--service-list", dest="servicelist", action="store_true", help="Also print list of unique services with names")
     parser.add_option("-S","--host-summary", dest="hostSummary", action="store_true", help="Show summary of scanned/alive hosts (default)")
     parser.add_option("-v","--verbose", dest="verbose", action="store_true", help="Verbose service list")
@@ -84,7 +85,7 @@ def main():
         helpers.printImportSummary(nmapOutput, True)
 
     # Check if default flags were used
-    defaultFlags = not options.ipList and not options.aliveHosts and not options.servicelist and not options.verbose and not options.cmd and not options.combine and not options.uniquePorts and not options.importedFiles
+    defaultFlags = not options.ipList and not options.aliveHosts and not options.aliveHostsWithPorts and not options.servicelist and not options.verbose and not options.cmd and not options.combine and not options.uniquePorts and not options.importedFiles
 
     if options.combine:
         nmapOutput.generateNmapParseXml(options.combine)
@@ -105,6 +106,9 @@ def main():
             
         if options.aliveHosts:
             helpers.printAliveIps(nmapOutput)
+
+        if options.aliveHostsWithPorts:
+            helpers.printAliveIpsWithPorts(nmapOutput)
 
         if options.servicelist or options.verbose:
             helpers.printServiceList(nmapOutput, filters=filters, verbose=options.verbose)
